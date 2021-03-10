@@ -39,12 +39,12 @@ public  class Utilities {
 		//Selecting Browser (Column No: 0)
 		//System.out.println(browser.matches("Chrome"));
 
-		if(browser.matches("Chrome")) {
+		if(browser.equalsIgnoreCase("Chrome")) {
 
 			WebDriverManager.chromedriver().setup();
 			driver= new ChromeDriver();
 		}
-		else if(browser.matches("Firefox")) {
+		else if(browser.equalsIgnoreCase("Firefox")) {
 			WebDriverManager.firefoxdriver();
 			driver= new FirefoxDriver();
 		}
@@ -52,6 +52,7 @@ public  class Utilities {
 		driver.get(url);
 
 		driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
+		driver.manage().window().maximize();
 		return driver;
 	}
 
@@ -150,7 +151,7 @@ public  class Utilities {
 
 		//System.out.println("cell"+cell+"cell");
 		cell.setCellType(CellType.STRING);
-		cell.setCellValue("Test case executed Successfully");
+		cell.setCellValue("Test passed Successfully");
 		fis.close();
 		FileOutputStream outFile = new FileOutputStream(new File(projectPath+"/src/main/resources/Practice Form.xlsx"));
 		workBook.write(outFile);
