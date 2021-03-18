@@ -7,7 +7,7 @@
         <methods>
           <include name="closeBrowser"/>
           <include name="openUrl"/>
-          <include name="fillData"/>
+          <include name="fillData" invocation-numbers="0 1"/>
           <include name="writeExcel"/>
         </methods>
       </class> <!-- controller.Controller -->

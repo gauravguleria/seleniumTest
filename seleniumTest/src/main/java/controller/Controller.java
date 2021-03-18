@@ -7,6 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 
@@ -14,39 +15,32 @@ import repos.TagHandlers;
 import utilities.Utilities;
 
 public class Controller {
-	public static ArrayList<ArrayList<Object>> row=null;
+	public static Object[][] row=null;
 	static WebDriver driver=null;
 	static String projectPath=System.getProperty("user.dir");
 
 	//read one row from excel
 	@BeforeSuite
 	public void openUrl() throws IOException {
-		row=Utilities.readXL();
+		//row=Utilities.readXL();
 
-		driver=Utilities.openBrowser((String)row.get(0).get(0));
+		driver=Utilities.openBrowser("Chrome");
 	}
 
+	
+	@DataProvider
+	public Object[][] getData() throws IOException {
+		row=Utilities.readXL();
+		return row;
+	}
 
 	//fill data in web form
-	@Test
-	public void fillData() {
-		//System.out.println(row.get(0).get(0));
-		String firstName=(String)row.get(0).get(1);
-		String lastName=(String)row.get(0).get(2);
-		String gender=(String)row.get(0).get(3);
-		double yearOfExperience=(Double)row.get(0).get(4);
-		int yoe=(int)yearOfExperience;
-		String date=(String)row.get(0).get(5);
-		String profession=(String)row.get(0).get(6);
-		String automationTool=(String)row.get(0).get(7);
-		String continent=(String)row.get(0).get(8);
-		String seleniumCommand=(String)row.get(0).get(9);
-		String filePath=(String)row.get(0).get(10);
-
-		//System.out.println(continent);
-		//System.out.println(seleniumCommand);
-
-
+	@Test(dataProvider = "getData")
+	public void fillData(String firstName,String lastName ,String gender, String yearOfExperience,String date,
+			String profession, String automationTool, String continent, String seleniumCommand, String filePath ) throws Exception {
+		
+		double year=Double.parseDouble(yearOfExperience);
+		int yoe=(int)year;
 
 		TagHandlers tags=PageFactory.initElements(driver, TagHandlers.class);
 		tags.fillTextBox(tags.firstName, firstName);
@@ -60,6 +54,8 @@ public class Controller {
 		tags.selectItem(tags.seleniumCommands, seleniumCommand);
 		tags.fillTextBox(tags.filePath, projectPath+filePath);
 		tags.click(tags.submit);
+		utilities.Utilities.takeSnapShot(driver, "/Users/gaurav.guleria/git/seleniumTest/seleniumTest/outputfile/test"+firstName+".png");
+		
 	}
 
 	//if test passes write comments in excel
